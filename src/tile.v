@@ -3,7 +3,7 @@ module tile(
     input reset,
     input sel,
     input turn,
-    output reg [1:0] state
+    output reg [1:0] tile_state
     );
     
     parameter EMPTY_STATE = 0;
@@ -21,11 +21,11 @@ module tile(
     end
     
     always @ (*) begin
-  
+        
         case (prev_state)
             EMPTY_STATE :
             begin
-                state = 2'b00;
+                tile_state = 2'b00;
                 
                 if (sel & ~turn) begin
                     next_state = X_STATE;
@@ -40,20 +40,19 @@ module tile(
             
             X_STATE : 
             begin
-                state = 2'b01;
+                tile_state = 2'b01;
                 next_state = prev_state;
             end
             
             O_STATE :
             begin
-                state = 2'b10;
+                tile_state = 2'b10;
                 next_state = prev_state;
             end
             
             default :
             begin
-                state = 2'b00;
-                prev_state = EMPTY_STATE;
+                tile_state = 2'b00;
                 next_state = EMPTY_STATE;
             end
         endcase
