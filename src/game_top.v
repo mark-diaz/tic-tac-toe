@@ -1,6 +1,7 @@
 module game_top(
     input clk,
     input reset,
+    input undo_sig,
     input [8:0] input_switches,
     output hsync,
     output vsync,
@@ -16,7 +17,9 @@ module game_top(
     wire game_over;
     reg current_turn;
 
-    // stack to track previous moves
+    // Undo stacks
+    reg [17:0] tiles_stack [0:15]; // Stack to store previous board states
+    reg current_turn_stack [0:15]; // Stack to store turn states
 
 
     // prioritize the most significant tile selected
@@ -57,6 +60,7 @@ module game_top(
     game_play game_logic (
         .clk(clk),
         .reset(reset),
+        .undo_sig(undo_sig),  // Pass undo signal
         .tiles(tiles),
         .game_over(game_over),
         .color(color)
